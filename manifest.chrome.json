@@ -15,30 +15,22 @@
 		}
 	},
 	"background": {
-		"scripts": ["background/background.js"]
+		"service_worker": "background/background.js"
 	},
 	"content_scripts": [
 		{
 			"matches": ["<all_urls>"],
-			"js": ["content/content.js"],
-			"css": ["content/content.css"]
+			"js": ["content/content.js"]
 		}
 	],
 	"commands": {
 		"toggle-popup": {
 			"suggested_key": {
 				"default": "Ctrl+Shift+X",
-				"mac": "MacCtrl+Shift+X"
-			},
-			"description": "付箋を生成するショートカットキー"
+				"mac": "Command+Shift+X"
+			}
 		}
 	},
 
-	"permissions": ["storage", "activeTab"],
-
-	"browser_specific_settings": {
-		"gecko": {
-			"id": "pincy@monak4.web.app"
-		}
-	}
+	"permissions": ["storage"]
 }
