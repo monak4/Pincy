@@ -21,13 +21,15 @@ function togglePopup() {
 function getPopupTemplate() {
 	return `
       <div class="custom-popup">
-        <div class="popup-header">
-          <span class="popup-close">×</span>
-        </div>
-        <div class="popup-content" contenteditable="true">
-          ここにコンテンツを入力できます
-        </div>
-      </div>
+    <div class="popup-header">
+        <span class="popup-close">×</span>
+    </div>
+    <div
+        class="popup-content"
+        contenteditable="true"
+        placeholder="ここにコンテンツを入力できます"
+    ></div>
+</div>
     `;
 }
 
@@ -39,7 +41,6 @@ function createDraggablePopup() {
 	popup.style.top = "100px";
 	popup.style.left = "100px";
 
-	// 閉じるボタンにイベントリスナーを追加
 	const closeBtn = popup.querySelector(".popup-close");
 	if (closeBtn) {
 		closeBtn.addEventListener("click", () => {
@@ -48,7 +49,6 @@ function createDraggablePopup() {
 		});
 	}
 
-	// ヘッダー要素を取得してドラッグ機能を実装
 	const header = popup.querySelector(".popup-header");
 	if (header) {
 		implementDragging(popup, header);

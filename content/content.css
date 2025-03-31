@@ -2,7 +2,7 @@
 	position: absolute;
 	width: 300px;
 	min-height: 200px;
-	background-color: white;
+	background-color: rgb(253, 255, 121);
 	border: 1px solid #ccc;
 	border-radius: 8px;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -14,7 +14,7 @@
 .popup-header {
 	height: 15px;
 	padding: 5px;
-	background-color: #f1f1f1;
+	background-color: #d5ff4b;
 	border-bottom: 1px solid #ddd;
 	cursor: move;
 }
@@ -22,13 +22,23 @@
 .popup-close {
 	cursor: pointer;
 	font-weight: bold;
-	color: black;
+	color: white;
 	float: right;
 }
 
 .popup-content {
-	color: rgb(133, 133, 133);
+	color: rgb(66, 66, 66);
 	padding: 15px;
 	overflow: auto;
 	height: calc(100% - 40px);
+	border: none;
+}
+
+.popup-content[contenteditable="true"]:empty::before {
+	content: attr(placeholder);
+	pointer-events: none;
+	display: block;
+}
+.popup-content:focus {
+	outline: 0;
 }
