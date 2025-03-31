@@ -25,6 +25,14 @@
 			"js": ["content/content.js"]
 		}
 	],
+	"commands": {
+		"toggle-popup": {
+			"suggested_key": {
+				"default": "Ctrl+Shift+P",
+				"mac": "Command+Shift+P"
+			}
+		}
+	},
 
 	"permissions": ["storage"],
 
