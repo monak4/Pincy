@@ -1,0 +1,36 @@
+{
+	"manifest_version": 3,
+	"name": "Pincy",
+	"version": "0.0.1",
+	"description": "web上で付箋を生成し、単語やアイデアを即座にメモすることができる拡張機能",
+
+	"icons": {
+		"16": "icons/icon-16.png",
+		"48": "icons/icon-48.png",
+		"128": "icons/icon-128.png"
+	},
+	"action": {
+		"default_popup": "popup/popup.html",
+		"default_icon": {
+			"16": "icons/icon-16.png",
+			"48": "icons/icon-48.png"
+		}
+	},
+	"background": {
+		"service_worker": "background/background.js"
+	},
+	"content_scripts": [
+		{
+			"matches": ["<all_urls>"],
+			"js": ["content/content.js"]
+		}
+	],
+
+	"permissions": ["storage"],
+
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "pincy@monak4.web.app"
+		}
+	}
+}
