@@ -1,10 +1,9 @@
 const browserAPI = typeof browser !== "undefined" ? browser : chrome;
 
-console.log("debug");
-
 browserAPI.commands.onCommand.addListener((command) => {
-	console.log("debug Toggling the feature!");
 	if (command === "toggle-popup") {
-		console.log("Toggling the feature!");
+		browserAPI.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+			browserAPI.tabs.sendMessage(tabs[0].id, { action: "togglePopup" });
+		});
 	}
 });

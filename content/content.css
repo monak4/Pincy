@@ -1,0 +1,34 @@
+.custom-popup {
+	position: absolute;
+	width: 300px;
+	min-height: 200px;
+	background-color: white;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	z-index: 9999;
+	overflow: hidden;
+	resize: both;
+}
+
+.popup-header {
+	height: 15px;
+	padding: 5px;
+	background-color: #f1f1f1;
+	border-bottom: 1px solid #ddd;
+	cursor: move;
+}
+
+.popup-close {
+	cursor: pointer;
+	font-weight: bold;
+	color: black;
+	float: right;
+}
+
+.popup-content {
+	color: rgb(133, 133, 133);
+	padding: 15px;
+	overflow: auto;
+	height: calc(100% - 40px);
+}
