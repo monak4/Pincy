@@ -1,21 +1,13 @@
 const browserAPI = typeof browser !== "undefined" ? browser : chrome;
-let popupInstance = null;
+let popup_z_index = 500;
+let count = 500;
 
 browserAPI.runtime.onMessage.addListener((message) => {
-	if (message.action === "togglePopup") {
-		togglePopup();
+	if (message.action === "createPopup") {
+		createDraggablePopup();
 	}
 	return true;
 });
-
-function togglePopup() {
-	if (popupInstance) {
-		popupInstance.remove();
-		popupInstance = null;
-	} else {
-		createDraggablePopup();
-	}
-}
 
 function getPopupTemplate() {
 	return `
@@ -44,20 +36,18 @@ function createDraggablePopup() {
 	if (closeBtn) {
 		closeBtn.addEventListener("click", () => {
 			popup.remove();
-			popupInstance = null;
 		});
 	}
 
 	const header = popup.querySelector(".pincy-popup-header");
 	if (header) {
-		implementDragging(popup, header);
+		implementDragging(popup, header, popup);
 	}
 
 	document.body.appendChild(popup);
-	popupInstance = popup;
 }
 
-function implementDragging(element, dragHandle) {
+function implementDragging(element, dragHandle, popup) {
 	let offsetX = 0;
 	let offsetY = 0;
 	let isDragging = false;
@@ -70,6 +60,9 @@ function implementDragging(element, dragHandle) {
 		isDragging = true;
 		offsetX = e.clientX - element.getBoundingClientRect().left;
 		offsetY = e.clientY - element.getBoundingClientRect().top;
+
+		count++;
+		popup.style.zIndex = count;
 
 		element.style.opacity = "0.8";
 		e.preventDefault();
