@@ -17,13 +17,28 @@
 	background-color: #d5ff4b;
 	border-bottom: 1px solid #ddd;
 	cursor: move;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
 }
 
 .pincy-popup-close {
 	cursor: pointer;
 	font-weight: bold;
-	color: white;
-	float: right;
+	color: #444;
+	margin-left: 10px;
+	font-size: 16px;
+}
+
+.pincy-popup-save {
+	cursor: pointer;
+	margin-right: auto;
+	font-size: 14px;
+}
+
+.pincy-popup-close:hover,
+.pincy-popup-save:hover {
+	opacity: 0.7;
 }
 
 .pincy-popup-content {
@@ -32,13 +47,17 @@
 	overflow: auto;
 	height: calc(100% - 40px);
 	border: none;
+	font-family: sans-serif;
+	line-height: 1.5;
 }
 
 .pincy-popup-content[contenteditable="true"]:empty::before {
 	content: attr(placeholder);
+	color: #888;
 	pointer-events: none;
 	display: block;
 }
+
 .pincy-popup-content:focus {
 	outline: 0;
 }
