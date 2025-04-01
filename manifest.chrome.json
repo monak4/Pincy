@@ -20,17 +20,19 @@
 	"content_scripts": [
 		{
 			"matches": ["<all_urls>"],
-			"js": ["content/content.js"]
+			"js": ["content/content.js"],
+			"css": ["content/content.css"]
 		}
 	],
 	"commands": {
 		"toggle-popup": {
 			"suggested_key": {
 				"default": "Ctrl+Shift+X",
-				"mac": "Command+Shift+X"
-			}
+				"mac": "MacCtrl+Shift+X"
+			},
+			"description": "付箋を生成するショートカットキー"
 		}
 	},
 
-	"permissions": ["storage"]
+	"permissions": ["unlimitedStorage", "activeTab"]
 }
