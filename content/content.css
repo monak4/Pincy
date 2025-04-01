@@ -1,4 +1,4 @@
-.custom-popup {
+.pincy-custom-popup {
 	position: absolute;
 	width: 300px;
 	min-height: 200px;
@@ -11,7 +11,7 @@
 	resize: both;
 }
 
-.popup-header {
+.pincy-popup-header {
 	height: 15px;
 	padding: 5px;
 	background-color: #d5ff4b;
@@ -19,14 +19,14 @@
 	cursor: move;
 }
 
-.popup-close {
+.pincy-popup-close {
 	cursor: pointer;
 	font-weight: bold;
 	color: white;
 	float: right;
 }
 
-.popup-content {
+.pincy-popup-content {
 	color: rgb(66, 66, 66);
 	padding: 15px;
 	overflow: auto;
@@ -34,11 +34,11 @@
 	border: none;
 }
 
-.popup-content[contenteditable="true"]:empty::before {
+.pincy-popup-content[contenteditable="true"]:empty::before {
 	content: attr(placeholder);
 	pointer-events: none;
 	display: block;
 }
-.popup-content:focus {
+.pincy-popup-content:focus {
 	outline: 0;
 }

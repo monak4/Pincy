@@ -20,12 +20,12 @@ function togglePopup() {
 
 function getPopupTemplate() {
 	return `
-      <div class="custom-popup">
-    <div class="popup-header">
-        <span class="popup-close">×</span>
+      <div class="pincy-custom-popup">
+    <div class="pincy-popup-header">
+        <span class="pincy-popup-close">×</span>
     </div>
     <div
-        class="popup-content"
+        class="pincy-popup-content"
         contenteditable="true"
         placeholder="ここにコンテンツを入力できます"
     ></div>
@@ -36,12 +36,12 @@ function getPopupTemplate() {
 function createDraggablePopup() {
 	const tempContainer = document.createElement("div");
 	tempContainer.innerHTML = getPopupTemplate();
-	const popup = tempContainer.querySelector(".custom-popup");
+	const popup = tempContainer.querySelector(".pincy-custom-popup");
 
 	popup.style.top = "100px";
 	popup.style.left = "100px";
 
-	const closeBtn = popup.querySelector(".popup-close");
+	const closeBtn = popup.querySelector(".pincy-popup-close");
 	if (closeBtn) {
 		closeBtn.addEventListener("click", () => {
 			popup.remove();
@@ -49,7 +49,7 @@ function createDraggablePopup() {
 		});
 	}
 
-	const header = popup.querySelector(".popup-header");
+	const header = popup.querySelector(".pincy-popup-header");
 	if (header) {
 		implementDragging(popup, header);
 	}
@@ -64,7 +64,7 @@ function implementDragging(element, dragHandle) {
 	let isDragging = false;
 
 	dragHandle.addEventListener("mousedown", (e) => {
-		if (e.target.classList.contains("popup-close")) {
+		if (e.target.classList.contains("pincy-popup-close")) {
 			return;
 		}
 
