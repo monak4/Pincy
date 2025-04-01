@@ -1,5 +1,4 @@
 const browserAPI = typeof browser !== "undefined" ? browser : chrome;
-
 let popupInstance = null;
 
 browserAPI.runtime.onMessage.addListener((message) => {
@@ -20,16 +19,16 @@ function togglePopup() {
 
 function getPopupTemplate() {
 	return `
-      <div class="pincy-custom-popup">
-    <div class="pincy-popup-header">
-        <span class="pincy-popup-close">×</span>
-    </div>
-    <div
-        class="pincy-popup-content"
-        contenteditable="true"
-        placeholder="ここにコンテンツを入力できます"
-    ></div>
-</div>
+    <div class="pincy-custom-popup">
+        <div class="pincy-popup-header">
+            <span class="pincy-popup-close">×</span>
+        </div>
+        <div
+            class="pincy-popup-content"
+            contenteditable="true"
+            placeholder="ここにコンテンツを入力できます"
+        ></div>
+	</div>
     `;
 }
 
