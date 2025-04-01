@@ -34,7 +34,7 @@
 		}
 	},
 
-	"permissions": ["unlimitedStorage", "activeTab"],
+	"permissions": ["unlimitedStorage", "activeTab", "storage"],
 
 	"browser_specific_settings": {
 		"gecko": {
