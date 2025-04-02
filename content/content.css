@@ -1,5 +1,5 @@
 .pincy-custom-popup {
-	position: absolute;
+	position: fixed;
 	width: 300px;
 	min-height: 200px;
 	background-color: rgb(253, 255, 121);
@@ -48,6 +48,7 @@
 	height: calc(100% - 40px);
 	border: none;
 	font-family: sans-serif;
+	font-size: 15px;
 	line-height: 1.5;
 }
 
