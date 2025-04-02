@@ -6,6 +6,8 @@ browserAPI.runtime.onMessage.addListener((message) => {
 		createDraggablePopup();
 	} else if (message.action === "openSavedNote") {
 		openSavedNote(message.noteData);
+	} else if (message.action === "saveNote") {
+		saveNote(message.content, generateId());
 	}
 	return true;
 });
