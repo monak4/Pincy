@@ -23,15 +23,15 @@ function loadSavedNotes() {
 			noteElement.dataset.id = note.id;
 
 			const displayText =
-				note.content.length > 30
-					? note.content.substring(0, 30) + "..."
+				note.content.length > 18
+					? note.content.substring(0, 18) + "..."
 					: note.content || "(空のメモ)";
 
 			noteElement.innerHTML = `
                 <p class="note-text">${displayText}</p>
-                <p class="note-date">作成: ${new Date(
+                <p class="note-info">作成: ${new Date(
 					note.createdAt
-				).toLocaleString("ja-JP")}</p>
+				).toLocaleString("ja-JP")} | ${note.content.length}文字</p>
             `;
 
 			// クリックしたらそのメモを開く

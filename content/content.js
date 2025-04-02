@@ -48,6 +48,7 @@ function createDraggablePopup(savedContent = "", noteId = null) {
 				".pincy-popup-content"
 			).innerHTML;
 			saveNote(content, noteId || generateId());
+			popup.remove();
 		});
 	}
 
@@ -95,7 +96,6 @@ function generateId() {
 	);
 }
 
-// 保存完了の通知を表示
 function showSaveConfirmation() {
 	const notification = document.createElement("div");
 	notification.style.position = "fixed";

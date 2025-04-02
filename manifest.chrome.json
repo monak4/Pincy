@@ -1,7 +1,7 @@
 {
 	"manifest_version": 3,
 	"name": "Pincy",
-	"version": "0.9.2",
+	"version": "0.9.21",
 	"description": "web上で付箋を生成し、単語やアイデアを即座にメモすることができる拡張機能",
 
 	"icons": {
