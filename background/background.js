@@ -20,18 +20,57 @@ browserAPI.commands.onCommand.addListener((command) => {
 browserAPI.contextMenus.onClicked.addListener((info, tab) => {
 	const content = info.selectionText;
 	if (content) {
-		browserAPI.tabs.sendMessage(tab.id, {
-			action: "savePin",
-			content: content,
-		});
+		savePin(content, generateId());
 	}
 });
 
 browserAPI.runtime.onMessage.addListener((message) => {
 	if (message.action === "incrementBadge") {
 		incrementBadge();
+	} else if (message.action === "savePin") {
+		savePin(message.content, message.id);
 	}
 });
+
+function savePin(content, id) {
+	browserAPI.storage.local.get(["pins"], function (result) {
+		const pins = result.pins || [];
+		const timestamp = Date.now();
+
+		const existingIndex = pins.findIndex((pin) => pin.id === id);
+
+		if (existingIndex >= 0) {
+			pins[existingIndex].content = content;
+			pins[existingIndex].updatedAt = timestamp;
+		} else {
+			pins.push({
+				id: id,
+				content: content,
+				createdAt: timestamp,
+				updatedAt: timestamp,
+			});
+		}
+
+		browserAPI.storage.local.set({ pins: pins }, function () {
+			browserAPI.tabs.query(
+				{ active: true, currentWindow: true },
+				(tabs) => {
+					browserAPI.tabs.sendMessage(tabs[0].id, {
+						action: "showSaveConfirmation",
+					});
+				}
+			);
+			incrementBadge();
+			browserAPI.runtime.sendMessage({ action: "loadSavedPins" });
+		});
+	});
+}
+
+function generateId() {
+	return (
+		"pin_" + Math.random().toString(36).substring(2, 9) + "_" + Date.now()
+	);
+}
 
 function incrementBadge() {
 	browserAPI.storage.local.get(["pins"], (result) => {

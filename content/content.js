@@ -6,8 +6,8 @@ browserAPI.runtime.onMessage.addListener((message) => {
 		createDraggablePopup();
 	} else if (message.action === "openSavedPin") {
 		openSavedPin(message.pinData);
-	} else if (message.action === "savePin") {
-		savePin(message.content, generateId());
+	} else if (message.action === "showSaveConfirmation") {
+		showSaveConfirmation();
 	}
 	return true;
 });
@@ -49,7 +49,11 @@ function createDraggablePopup(savedContent = "", pinId = null) {
 			const content = popup.querySelector(
 				".pincy-popup-content"
 			).innerHTML;
-			savePin(content, pinId || generateId());
+			browserAPI.runtime.sendMessage({
+				action: "savePin",
+				content: content,
+				id: pinId || generateId(),
+			});
 			popup.remove();
 		});
 	}
@@ -64,33 +68,6 @@ function createDraggablePopup(savedContent = "", pinId = null) {
 
 function openSavedPin(pinData) {
 	createDraggablePopup(pinData.content, pinData.id);
-}
-
-function savePin(content, id) {
-	browserAPI.storage.local.get(["pins"], function (result) {
-		const pins = result.pins || [];
-		const timestamp = Date.now();
-
-		// すでに存在するメモかどうか確認
-		const existingIndex = pins.findIndex((pin) => pin.id === id);
-
-		if (existingIndex >= 0) {
-			pins[existingIndex].content = content;
-			pins[existingIndex].updatedAt = timestamp;
-		} else {
-			pins.push({
-				id: id,
-				content: content,
-				createdAt: timestamp,
-				updatedAt: timestamp,
-			});
-		}
-
-		browserAPI.storage.local.set({ pins: pins }, function () {
-			showSaveConfirmation();
-			browserAPI.runtime.sendMessage({ action: "incrementBadge" });
-		});
-	});
 }
 
 function generateId() {

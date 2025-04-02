@@ -2,6 +2,12 @@ const browserAPI = typeof browser !== "undefined" ? browser : chrome;
 const createPinButton = document.getElementById("createPin");
 const savedPinsContainer = document.getElementById("savedPins");
 
+browserAPI.runtime.onMessage.addListener((message) => {
+	if (message.action === "loadSavedPins") {
+		loadSavedPins();
+	}
+});
+
 function loadSavedPins() {
 	browserAPI.runtime.sendMessage({ action: "incrementBadge" });
 	browserAPI.storage.local.get(["pins"], (result) => {
