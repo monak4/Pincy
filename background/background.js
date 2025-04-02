@@ -1,9 +1,10 @@
 const browserAPI = typeof browser !== "undefined" ? browser : chrome;
 
 browserAPI.runtime.onInstalled.addListener(() => {
-	chrome.contextMenus.create({
+	browserAPI.contextMenus.create({
 		id: "selected_new_pin",
 		title: "選択した文字列をピンに追加",
+		contexts: ["selection"],
 	});
 });
 
@@ -17,8 +18,10 @@ browserAPI.commands.onCommand.addListener((command) => {
 
 browserAPI.contextMenus.onClicked.addListener((info, tab) => {
 	const content = info.selectionText;
-	browserAPI.tabs.sendMessage(tab.id, {
-		action: "saveNote",
-		content: content,
-	});
+	if (content) {
+		browserAPI.tabs.sendMessage(tab.id, {
+			action: "saveNote",
+			content: content,
+		});
+	}
 });
