@@ -1,6 +1,7 @@
 const browserAPI = typeof browser !== "undefined" ? browser : chrome;
 
 browserAPI.runtime.onInstalled.addListener(() => {
+	incrementBadge();
 	browserAPI.contextMenus.create({
 		id: "selected_new_pin",
 		title: "選択した文字列をピンに追加",
@@ -25,3 +26,26 @@ browserAPI.contextMenus.onClicked.addListener((info, tab) => {
 		});
 	}
 });
+
+browserAPI.runtime.onMessage.addListener((message) => {
+	if (message.action === "incrementBadge") {
+		incrementBadge();
+	}
+});
+
+function incrementBadge() {
+	browserAPI.storage.local.get(["notes"], (result) => {
+		try {
+			const noteCount = Array.isArray(result?.notes)
+				? result.notes.length
+				: 0;
+			if (noteCount > 0) {
+				browserAPI.action.setBadgeText({ text: noteCount.toString() });
+			} else {
+				browserAPI.action.setBadgeText({ text: "" });
+			}
+		} catch (error) {
+			console.error("Error updating badge:", error);
+		}
+	});
+}

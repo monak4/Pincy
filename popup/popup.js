@@ -3,6 +3,7 @@ const createPinButton = document.getElementById("createPin");
 const savedNotesContainer = document.getElementById("savedNotes");
 
 function loadSavedNotes() {
+	browserAPI.runtime.sendMessage({ action: "incrementBadge" });
 	browserAPI.storage.local.get(["notes"], (result) => {
 		const notes = Array.isArray(result.notes) ? result.notes.reverse() : [];
 
@@ -51,6 +52,7 @@ function loadSavedNotes() {
 			deleteBtn.addEventListener("click", (e) => {
 				e.stopPropagation();
 				deleteNote(note.id);
+				browserAPI.runtime.sendMessage({ action: "incrementBadge" });
 			});
 		});
 	});

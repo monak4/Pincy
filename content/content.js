@@ -88,6 +88,7 @@ function saveNote(content, id) {
 
 		browserAPI.storage.local.set({ notes: notes }, function () {
 			showSaveConfirmation();
+			browserAPI.runtime.sendMessage({ action: "incrementBadge" });
 		});
 	});
 }
