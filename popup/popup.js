@@ -32,14 +32,59 @@ function loadSavedNotes() {
                 <p class="note-info">作成: ${new Date(
 					note.createdAt
 				).toLocaleString("ja-JP")} | ${note.content.length}文字</p>
+				<button type="button" class="delete-pin-btn" data-note-id="${
+					note.id
+				}"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#999999"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm80-160h80v-360h-80v360Zm160 0h80v-360h-80v360Z"/></svg></button>
             `;
 
-			// クリックしたらそのメモを開く
-			noteElement.addEventListener("click", () => {
+			savedNotesContainer.appendChild(noteElement);
+
+			noteElement.addEventListener("click", (e) => {
+				if (e.target.classList.contains("delete-pin-btn")) {
+					e.stopPropagation();
+					return;
+				}
 				openSavedNote(note);
 			});
 
-			savedNotesContainer.appendChild(noteElement);
+			const deleteBtn = noteElement.querySelector(".delete-pin-btn");
+			deleteBtn.addEventListener("click", (e) => {
+				e.stopPropagation();
+				deleteNote(note.id);
+			});
+		});
+	});
+}
+
+function deleteNote(noteId) {
+	browserAPI.storage.local.get(["notes"], function (result) {
+		const notes = result.notes || [];
+		const filteredNotes = notes.filter((note) => note.id !== noteId);
+
+		browserAPI.storage.local.set({ notes: filteredNotes }, function () {
+			loadSavedNotes();
+
+			const notification = document.createElement("div");
+			notification.textContent = "メモを削除しました";
+			notification.style.backgroundColor = "#ff6b6b";
+			notification.style.color = "white";
+			notification.style.padding = "5px 10px";
+			notification.style.borderRadius = "4px";
+			notification.style.position = "fixed";
+			notification.style.bottom = "10px";
+			notification.style.left = "50%";
+			notification.style.transform = "translateX(-50%)";
+			notification.style.zIndex = "1000";
+
+			document.body.appendChild(notification);
+
+			setTimeout(() => {
+				notification.style.opacity = "0";
+				notification.style.transition = "opacity 0.5s";
+				setTimeout(() => {
+					notification.remove();
+				}, 500);
+			}, 2000);
 		});
 	});
 }

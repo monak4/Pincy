@@ -54,9 +54,9 @@ h1 {
 	cursor: pointer;
 	transition: transform 0.2s;
 	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
 	position: relative;
+	display: flex;
+	flex-direction: column;
 }
 
 .note-item:hover {
@@ -67,12 +67,50 @@ h1 {
 .note-text {
 	margin: 0;
 	font-size: 14px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .note-info {
 	font-size: 10px;
 	color: #666;
 	margin: 4px 0 0 0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+#deletePin {
+	background-color: #ff6b6b;
+	color: white;
+	border: none;
+	border-radius: 3px;
+	padding: 2px 8px;
+	font-size: 10px;
+	cursor: pointer;
+	margin-left: auto;
+	transition: background-color 0.2s;
+}
+
+#deletePin:hover {
+	background-color: #e05252;
+}
+
+.delete-pin-btn {
+	background-color: #ff6b6b;
+	color: white;
+	border: none;
+	border-radius: 3px;
+	padding: 2px 8px;
+	font-size: 10px;
+	cursor: pointer;
+	margin-left: auto;
+	transition: background-color 0.2s;
+}
+
+.delete-pin-btn:hover {
+	background-color: #e05252;
 }
 
 .empty-state {
