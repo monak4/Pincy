@@ -3,8 +3,8 @@ const createPinButton = document.getElementById("createPin");
 const savedNotesContainer = document.getElementById("savedNotes");
 
 function loadSavedNotes() {
-	browserAPI.storage.local.get(["notes"], function (result) {
-		const notes = result.notes.reverse() || [];
+	browserAPI.storage.local.get(["notes"], (result) => {
+		const notes = Array.isArray(result.notes) ? result.notes.reverse() : [];
 
 		if (notes.length === 0) {
 			savedNotesContainer.innerHTML = `

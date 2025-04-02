@@ -1,5 +1,5 @@
 const browserAPI = typeof browser !== "undefined" ? browser : chrome;
-let popup_z_index = 500;
+let popup_z_index = 3000;
 
 browserAPI.runtime.onMessage.addListener((message) => {
 	if (message.action === "createPopup") {
