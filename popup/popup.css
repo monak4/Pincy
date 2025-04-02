@@ -38,7 +38,7 @@ h1 {
 }
 
 .notes-container {
-	max-height: 300px;
+	max-height: 270px;
 	overflow-y: auto;
 	background-color: white;
 	border-radius: 8px;
