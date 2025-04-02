@@ -21,7 +21,7 @@ browserAPI.contextMenus.onClicked.addListener((info, tab) => {
 	const content = info.selectionText;
 	if (content) {
 		browserAPI.tabs.sendMessage(tab.id, {
-			action: "saveNote",
+			action: "savePin",
 			content: content,
 		});
 	}
@@ -34,13 +34,13 @@ browserAPI.runtime.onMessage.addListener((message) => {
 });
 
 function incrementBadge() {
-	browserAPI.storage.local.get(["notes"], (result) => {
+	browserAPI.storage.local.get(["pins"], (result) => {
 		try {
-			const noteCount = Array.isArray(result?.notes)
-				? result.notes.length
+			const pinCount = Array.isArray(result?.pins)
+				? result.pins.length
 				: 0;
-			if (noteCount > 0) {
-				browserAPI.action.setBadgeText({ text: noteCount.toString() });
+			if (pinCount > 0) {
+				browserAPI.action.setBadgeText({ text: pinCount.toString() });
 			} else {
 				browserAPI.action.setBadgeText({ text: "" });
 			}

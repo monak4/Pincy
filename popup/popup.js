@@ -1,70 +1,70 @@
 const browserAPI = typeof browser !== "undefined" ? browser : chrome;
 const createPinButton = document.getElementById("createPin");
-const savedNotesContainer = document.getElementById("savedNotes");
+const savedPinsContainer = document.getElementById("savedPins");
 
-function loadSavedNotes() {
+function loadSavedPins() {
 	browserAPI.runtime.sendMessage({ action: "incrementBadge" });
-	browserAPI.storage.local.get(["notes"], (result) => {
-		const notes = Array.isArray(result.notes) ? result.notes.reverse() : [];
+	browserAPI.storage.local.get(["pins"], (result) => {
+		const pins = Array.isArray(result.pins) ? result.pins.reverse() : [];
 
-		if (notes.length === 0) {
-			savedNotesContainer.innerHTML = `
+		if (pins.length === 0) {
+			savedPinsContainer.innerHTML = `
                 <div class="empty-state">
-                    まだ保存された付箋はありません。<br>
-                    「新しい付箋を作成」ボタンをクリックしてみましょう。
+                    まだ保存されたピンはありません。<br>
+                    「新しいピンを作成」ボタンをクリックしてみましょう。
                 </div>
             `;
 			return;
 		}
 
-		savedNotesContainer.innerHTML = "";
-		notes.forEach((note, index) => {
-			const noteElement = document.createElement("div");
-			noteElement.className = "note-item";
-			noteElement.dataset.id = note.id;
+		savedPinsContainer.innerHTML = "";
+		pins.forEach((pin, index) => {
+			const pinElement = document.createElement("div");
+			pinElement.className = "pin-item";
+			pinElement.dataset.id = pin.id;
 
 			const displayText =
-				note.content.length > 18
-					? note.content.substring(0, 18) + "..."
-					: note.content || "(空のメモ)";
+				pin.content.length > 18
+					? pin.content.substring(0, 18) + "..."
+					: pin.content || "(空のメモ)";
 
-			noteElement.innerHTML = `
-                <p class="note-text">${displayText}</p>
-                <p class="note-info">作成: ${new Date(
-					note.createdAt
-				).toLocaleString("ja-JP")} | ${note.content.length}文字</p>
-				<button type="button" class="delete-pin-btn" data-note-id="${
-					note.id
+			pinElement.innerHTML = `
+                <p class="pin-text">${displayText}</p>
+                <p class="pin-info">作成: ${new Date(
+					pin.createdAt
+				).toLocaleString("ja-JP")} | ${pin.content.length}文字</p>
+				<button type="button" class="delete-pin-btn" data-pin-id="${
+					pin.id
 				}"><svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#FFFFFF"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm80-160h80v-360h-80v360Zm160 0h80v-360h-80v360Z"/></svg></button>
             `;
 
-			savedNotesContainer.appendChild(noteElement);
+			savedPinsContainer.appendChild(pinElement);
 
-			noteElement.addEventListener("click", (e) => {
+			pinElement.addEventListener("click", (e) => {
 				if (e.target.classList.contains("delete-pin-btn")) {
 					e.stopPropagation();
 					return;
 				}
-				openSavedNote(note);
+				openSavedPin(pin);
 			});
 
-			const deleteBtn = noteElement.querySelector(".delete-pin-btn");
+			const deleteBtn = pinElement.querySelector(".delete-pin-btn");
 			deleteBtn.addEventListener("click", (e) => {
 				e.stopPropagation();
-				deleteNote(note.id);
+				deletePin(pin.id);
 				browserAPI.runtime.sendMessage({ action: "incrementBadge" });
 			});
 		});
 	});
 }
 
-function deleteNote(noteId) {
-	browserAPI.storage.local.get(["notes"], function (result) {
-		const notes = result.notes || [];
-		const filteredNotes = notes.filter((note) => note.id !== noteId);
+function deletePin(pinId) {
+	browserAPI.storage.local.get(["pins"], function (result) {
+		const pins = result.pins || [];
+		const filteredPins = pins.filter((pin) => pin.id !== pinId);
 
-		browserAPI.storage.local.set({ notes: filteredNotes }, function () {
-			loadSavedNotes();
+		browserAPI.storage.local.set({ pins: filteredPins }, function () {
+			loadSavedPins();
 
 			const notification = document.createElement("div");
 			notification.textContent = "メモを削除しました";
@@ -91,11 +91,11 @@ function deleteNote(noteId) {
 	});
 }
 
-function openSavedNote(note) {
+function openSavedPin(pin) {
 	browserAPI.tabs.query({ active: true, currentWindow: true }, (tabs) => {
 		browserAPI.tabs.sendMessage(tabs[0].id, {
-			action: "openSavedNote",
-			noteData: note,
+			action: "openSavedPin",
+			pinData: pin,
 		});
 		window.close();
 	});
@@ -108,4 +108,4 @@ createPinButton.addEventListener("click", () => {
 	});
 });
 
-document.addEventListener("DOMContentLoaded", loadSavedNotes);
+document.addEventListener("DOMContentLoaded", loadSavedPins);

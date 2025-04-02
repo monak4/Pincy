@@ -37,7 +37,7 @@ h1 {
 	box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
 }
 
-.notes-container {
+.pins-container {
 	max-height: 270px;
 	overflow-y: auto;
 	background-color: white;
@@ -46,7 +46,7 @@ h1 {
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.note-item {
+.pin-item {
 	background-color: #fdff79;
 	margin-bottom: 8px;
 	padding: 8px;
@@ -59,12 +59,12 @@ h1 {
 	flex-direction: column;
 }
 
-.note-item:hover {
+.pin-item:hover {
 	transform: translateY(-2px);
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.note-text {
+.pin-text {
 	margin: 0;
 	font-size: 14px;
 	white-space: nowrap;
@@ -72,7 +72,7 @@ h1 {
 	text-overflow: ellipsis;
 }
 
-.note-info {
+.pin-info {
 	font-size: 10px;
 	color: #666;
 	margin: 4px 0 0 0;

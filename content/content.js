@@ -4,10 +4,10 @@ let popup_z_index = 3000;
 browserAPI.runtime.onMessage.addListener((message) => {
 	if (message.action === "createPopup") {
 		createDraggablePopup();
-	} else if (message.action === "openSavedNote") {
-		openSavedNote(message.noteData);
-	} else if (message.action === "saveNote") {
-		saveNote(message.content, generateId());
+	} else if (message.action === "openSavedPin") {
+		openSavedPin(message.pinData);
+	} else if (message.action === "savePin") {
+		savePin(message.content, generateId());
 	}
 	return true;
 });
@@ -28,9 +28,9 @@ function getPopupTemplate(content = "", id = null) {
     `;
 }
 
-function createDraggablePopup(savedContent = "", noteId = null) {
+function createDraggablePopup(savedContent = "", pinId = null) {
 	const tempContainer = document.createElement("div");
-	tempContainer.innerHTML = getPopupTemplate(savedContent, noteId);
+	tempContainer.innerHTML = getPopupTemplate(savedContent, pinId);
 	const popup = tempContainer.querySelector(".pincy-custom-popup");
 
 	popup.style.top = "100px";
@@ -49,7 +49,7 @@ function createDraggablePopup(savedContent = "", noteId = null) {
 			const content = popup.querySelector(
 				".pincy-popup-content"
 			).innerHTML;
-			saveNote(content, noteId || generateId());
+			savePin(content, pinId || generateId());
 			popup.remove();
 		});
 	}
@@ -62,23 +62,23 @@ function createDraggablePopup(savedContent = "", noteId = null) {
 	document.body.appendChild(popup);
 }
 
-function openSavedNote(noteData) {
-	createDraggablePopup(noteData.content, noteData.id);
+function openSavedPin(pinData) {
+	createDraggablePopup(pinData.content, pinData.id);
 }
 
-function saveNote(content, id) {
-	browserAPI.storage.local.get(["notes"], function (result) {
-		const notes = result.notes || [];
+function savePin(content, id) {
+	browserAPI.storage.local.get(["pins"], function (result) {
+		const pins = result.pins || [];
 		const timestamp = Date.now();
 
 		// すでに存在するメモかどうか確認
-		const existingIndex = notes.findIndex((note) => note.id === id);
+		const existingIndex = pins.findIndex((pin) => pin.id === id);
 
 		if (existingIndex >= 0) {
-			notes[existingIndex].content = content;
-			notes[existingIndex].updatedAt = timestamp;
+			pins[existingIndex].content = content;
+			pins[existingIndex].updatedAt = timestamp;
 		} else {
-			notes.push({
+			pins.push({
 				id: id,
 				content: content,
 				createdAt: timestamp,
@@ -86,7 +86,7 @@ function saveNote(content, id) {
 			});
 		}
 
-		browserAPI.storage.local.set({ notes: notes }, function () {
+		browserAPI.storage.local.set({ pins: pins }, function () {
 			showSaveConfirmation();
 			browserAPI.runtime.sendMessage({ action: "incrementBadge" });
 		});
@@ -95,7 +95,7 @@ function saveNote(content, id) {
 
 function generateId() {
 	return (
-		"note_" + Math.random().toString(36).substring(2, 9) + "_" + Date.now()
+		"pin_" + Math.random().toString(36).substring(2, 9) + "_" + Date.now()
 	);
 }
 
