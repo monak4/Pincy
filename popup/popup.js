@@ -1,6 +1,7 @@
 const browserAPI = typeof browser !== "undefined" ? browser : chrome;
 const createPinButton = document.getElementById("createPin");
 const savedPinsContainer = document.getElementById("savedPins");
+const settingsButton = document.getElementById("settingsButton");
 
 browserAPI.runtime.onMessage.addListener((message) => {
 	if (message.action === "loadSavedPins") {
@@ -106,6 +107,10 @@ function openSavedPin(pin) {
 		window.close();
 	});
 }
+
+settingsButton.addEventListener("click", () => {
+	browserAPI.runtime.openOptionsPage();
+});
 
 createPinButton.addEventListener("click", () => {
 	browserAPI.tabs.query({ active: true, currentWindow: true }, (tabs) => {

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Pincy - 設定</title>
+		<link rel="stylesheet" href="settings.css" />
+	</head>
+	<body>
+		<div class="container">
+			<header>
+				<h1>Pincy 設定</h1>
+			</header>
+
+			<div class="settings-wrapper">
+				<div class="settings-section">
+					<h2>基本設定</h2>
+
+					<div class="setting-item">
+						<label for="defaultColor">メモの背景色</label>
+						<div class="color-picker">
+							<input
+								type="color"
+								id="defaultColor"
+								value="#fdff79"
+							/>
+							<span class="color-value">#fdff79</span>
+						</div>
+					</div>
+
+					<div class="setting-item">
+						<label for="defaultSize">メモのデフォルトサイズ</label>
+						<div class="size-input">
+							<div>
+								<input
+									type="number"
+									id="defaultWidth"
+									min="200"
+									max="800"
+									value="300"
+								/>
+								<span>px (幅)</span>
+							</div>
+							<div>
+								<input
+									type="number"
+									id="defaultHeight"
+									min="100"
+									max="600"
+									value="200"
+								/>
+								<span>px (高さ)</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="setting-item">
+						<label for="fontSize">フォントサイズ</label>
+						<select id="fontSize">
+							<option value="small">小</option>
+							<option value="medium" selected>中</option>
+							<option value="large">大</option>
+						</select>
+					</div>
+
+					<div class="setting-item">
+						<label for="autosave">自動保存</label>
+						<div class="toggle-switch">
+							<input type="checkbox" id="autosave" />
+							<span class="slider"></span>
+						</div>
+					</div>
+
+					<div class="setting-item">
+						<label for="saveInterval" class="sub-setting"
+							>自動保存の間隔</label
+						>
+						<select id="saveInterval" class="sub-setting">
+							<option value="30">30秒</option>
+							<option value="60" selected>1分</option>
+							<option value="300">5分</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="settings-section">
+					<h2>ショートカット設定</h2>
+
+					<div class="shortcut-info">
+						<p>
+							現在の新規メモ作成ショートカット: <kbd>Ctrl</kbd> +
+							<kbd>Shift</kbd> + <kbd>P</kbd>
+						</p>
+						<a href="#" id="changeShortcut"
+							>ショートカットを変更する</a
+						>
+					</div>
+
+					<div class="setting-item">
+						<label for="enableContextMenu"
+							>右クリックメニューを有効にする</label
+						>
+						<div class="toggle-switch">
+							<input
+								type="checkbox"
+								id="enableContextMenu"
+								checked
+							/>
+							<span class="slider"></span>
+						</div>
+					</div>
+				</div>
+
+				<div class="settings-section">
+					<h2>データ管理</h2>
+
+					<div class="setting-item button-group">
+						<button id="exportData" class="btn btn-primary">
+							データをエクスポート
+						</button>
+						<button id="importData" class="btn btn-secondary">
+							データをインポート
+						</button>
+						<input
+							type="file"
+							id="importFile"
+							accept=".json"
+							style="display: none"
+						/>
+					</div>
+
+					<div class="setting-item">
+						<label for="maxPins">最大保存数</label>
+						<select id="maxPins">
+							<option value="50">50個</option>
+							<option value="100" selected>100個</option>
+							<option value="200">200個</option>
+							<option value="0">無制限</option>
+						</select>
+					</div>
+
+					<div class="danger-zone">
+						<h3>危険な操作</h3>
+						<button id="clearData" class="btn btn-danger">
+							すべてのデータを削除
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="action-buttons">
+				<button id="resetDefaults" class="btn">デフォルトに戻す</button>
+				<button id="saveSettings" class="btn btn-primary">保存</button>
+			</div>
+
+			<footer>
+				<p>Pincy v1.0.0</p>
+			</footer>
+		</div>
+
+		<div id="overlay" class="hidden">
+			<div class="dialog">
+				<h2>確認</h2>
+				<p id="dialogMessage"></p>
+				<div class="dialog-buttons">
+					<button id="cancelDialog" class="btn btn-secondary">
+						キャンセル
+					</button>
+					<button id="confirmDialog" class="btn btn-danger">
+						確認
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<script src="settings.js"></script>
+	</body>
+</html>
