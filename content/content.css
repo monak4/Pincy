@@ -52,6 +52,19 @@
 	line-height: 1.5;
 }
 
+/* フォントサイズの設定 */
+.pincy-popup-content.small {
+	font-size: 12px;
+}
+
+.pincy-popup-content.medium {
+	font-size: 15px;
+}
+
+.pincy-popup-content.large {
+	font-size: 18px;
+}
+
 .pincy-popup-content[contenteditable="true"]:empty::before {
 	content: attr(placeholder);
 	color: #888;

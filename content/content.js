@@ -1,5 +1,6 @@
 const browserAPI = typeof browser !== "undefined" ? browser : chrome;
 let popup_z_index = 3000;
+let autosaveInterval = null;
 
 browserAPI.runtime.onMessage.addListener((message) => {
 	if (message.action === "createPopup") {
@@ -33,12 +34,20 @@ function createDraggablePopup(savedContent = "", pinId = null) {
 	tempContainer.innerHTML = getPopupTemplate(savedContent, pinId);
 	const popup = tempContainer.querySelector(".pincy-custom-popup");
 
+	// 設定を適用
+	applySettings(popup, pinId);
+
 	popup.style.top = "100px";
 	popup.style.left = "100px";
 
 	const closeBtn = popup.querySelector(".pincy-popup-close");
 	if (closeBtn) {
 		closeBtn.addEventListener("click", () => {
+			// 自動保存のインターバルがある場合はクリア
+			if (autosaveInterval) {
+				clearInterval(autosaveInterval);
+				autosaveInterval = null;
+			}
 			popup.remove();
 		});
 	}
@@ -46,15 +55,7 @@ function createDraggablePopup(savedContent = "", pinId = null) {
 	const saveBtn = popup.querySelector(".pincy-popup-save");
 	if (saveBtn) {
 		saveBtn.addEventListener("click", () => {
-			const content = popup.querySelector(
-				".pincy-popup-content"
-			).innerHTML;
-			browserAPI.runtime.sendMessage({
-				action: "savePin",
-				content: content,
-				id: pinId || generateId(),
-			});
-			popup.remove();
+			saveCurrentPin(popup, pinId);
 		});
 	}
 
@@ -64,6 +65,75 @@ function createDraggablePopup(savedContent = "", pinId = null) {
 	}
 
 	document.body.appendChild(popup);
+
+	// 自動保存の設定
+	setupAutosave(popup, pinId);
+}
+
+function applySettings(popup, pinId) {
+	browserAPI.storage.local.get(["settings"], (result) => {
+		const settings = result.settings || {};
+
+		// 背景色の設定
+		if (settings.defaultColor) {
+			popup.style.backgroundColor = settings.defaultColor;
+		}
+
+		// サイズの設定
+		if (settings.defaultWidth) {
+			popup.style.width = `${settings.defaultWidth}px`;
+		}
+		if (settings.defaultHeight) {
+			popup.style.minHeight = `${settings.defaultHeight}px`;
+		}
+
+		// フォントサイズの設定
+		if (settings.fontSize) {
+			const content = popup.querySelector(".pincy-popup-content");
+			if (content) {
+				switch (settings.fontSize) {
+					case "small":
+						content.style.fontSize = "12px";
+						break;
+					case "medium":
+						content.style.fontSize = "15px";
+						break;
+					case "large":
+						content.style.fontSize = "18px";
+						break;
+				}
+			}
+		}
+	});
+}
+
+function setupAutosave(popup, pinId) {
+	browserAPI.storage.local.get(["settings"], (result) => {
+		const settings = result.settings || {};
+
+		// 既存の自動保存があれば解除
+		if (autosaveInterval) {
+			clearInterval(autosaveInterval);
+			autosaveInterval = null;
+		}
+
+		// 自動保存が有効な場合
+		if (settings.autosave) {
+			const interval = settings.saveInterval || 60; // デフォルトは60秒
+			autosaveInterval = setInterval(() => {
+				saveCurrentPin(popup, pinId);
+			}, interval * 1000);
+		}
+	});
+}
+
+function saveCurrentPin(popup, pinId) {
+	const content = popup.querySelector(".pincy-popup-content").innerHTML;
+	browserAPI.runtime.sendMessage({
+		action: "savePin",
+		content: content,
+		id: pinId || generateId(),
+	});
 }
 
 function openSavedPin(pinData) {

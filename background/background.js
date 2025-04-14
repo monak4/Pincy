@@ -2,11 +2,7 @@ const browserAPI = typeof browser !== "undefined" ? browser : chrome;
 
 browserAPI.runtime.onInstalled.addListener(() => {
 	incrementBadge();
-	browserAPI.contextMenus.create({
-		id: "selected_new_pin",
-		title: "選択した文字列をピンに追加",
-		contexts: ["selection"],
-	});
+	setupContextMenu();
 });
 
 browserAPI.commands.onCommand.addListener((command) => {
@@ -16,6 +12,29 @@ browserAPI.commands.onCommand.addListener((command) => {
 		});
 	}
 });
+
+function setupContextMenu() {
+	// 設定を取得してコンテキストメニューの状態を設定
+	browserAPI.storage.local.get(["settings"], (result) => {
+		const settings = result.settings || {};
+		const enableContextMenu =
+			settings.enableContextMenu !== undefined
+				? settings.enableContextMenu
+				: true; // デフォルトはtrue
+
+		// 一旦削除
+		browserAPI.contextMenus.removeAll(() => {
+			// 有効な場合のみ作成
+			if (enableContextMenu) {
+				browserAPI.contextMenus.create({
+					id: "selected_new_pin",
+					title: "選択した文字列をピンに追加",
+					contexts: ["selection"],
+				});
+			}
+		});
+	});
+}
 
 browserAPI.contextMenus.onClicked.addListener((info, tab) => {
 	const content = info.selectionText;
@@ -29,12 +48,16 @@ browserAPI.runtime.onMessage.addListener((message) => {
 		incrementBadge();
 	} else if (message.action === "savePin") {
 		savePin(message.content, message.id);
+	} else if (message.action === "updateContextMenu") {
+		setupContextMenu();
 	}
 });
 
 function savePin(content, id) {
-	browserAPI.storage.local.get(["pins"], function (result) {
+	browserAPI.storage.local.get(["pins", "settings"], function (result) {
 		const pins = result.pins || [];
+		const settings = result.settings || {};
+		const maxPins = settings.maxPins || 100; // デフォルトは100
 		const timestamp = Date.now();
 
 		const existingIndex = pins.findIndex((pin) => pin.id === id);
@@ -43,6 +66,13 @@ function savePin(content, id) {
 			pins[existingIndex].content = content;
 			pins[existingIndex].updatedAt = timestamp;
 		} else {
+			// 最大数を超える場合は古いものを削除
+			if (pins.length >= maxPins) {
+				// 日付でソートして古いものを削除
+				pins.sort((a, b) => a.updatedAt - b.updatedAt);
+				pins.shift(); // 最も古いものを削除
+			}
+
 			pins.push({
 				id: id,
 				content: content,

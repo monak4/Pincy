@@ -95,15 +95,7 @@ function saveSettings() {
 
 // コンテキストメニューの有効/無効を切り替え
 function updateContextMenuState(enabled) {
-	if (enabled) {
-		browserAPI.contextMenus.create({
-			id: "selected_new_pin",
-			title: "選択した文字列をピンに追加",
-			contexts: ["selection"],
-		});
-	} else {
-		browserAPI.contextMenus.remove("selected_new_pin");
-	}
+	browserAPI.runtime.sendMessage({ action: "updateContextMenu" });
 }
 
 function resetToDefaults() {
